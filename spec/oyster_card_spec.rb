@@ -31,4 +31,38 @@ describe Oystercard do
       expect { card.deduct(deduct_value) }.to change { card.balance }.from(top_up_value).to(top_up_value - deduct_value)
     end
   end
+
+  describe '#touch_in' do
+    it 'tells the user the card is touched in' do
+      card = Oystercard.new
+      result = card.touch_in
+      expect(result).to eq("touched in")
+    end
+  end
+
+  describe '#touch_out' do
+    it 'tells the user their card has touched out' do
+      card = Oystercard.new
+      result = card.touch_out
+      expect(result).to eq("touched out")
+    end
+  end
+
+  describe '#in_journey?' do
+    context 'when the user has touched in' do
+      it "returns True" do
+        card = Oystercard.new
+        card.touch_in
+        expect(card).to be_in_journey
+      end
+    end
+    context 'when the user has touched out' do
+      it "returns False" do
+        card = Oystercard.new
+        card.touch_in
+        card.touch_out
+        expect(card).not_to be_in_journey
+      end
+    end
+  end
 end

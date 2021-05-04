@@ -14,6 +14,20 @@ class Oystercard
     @balance -= amount
   end
 
+  def touch_in
+    @in_journey = true
+    "touched in"
+  end
+
+  def touch_out
+    @in_journey = false
+    "touched out"
+  end
+
+  def in_journey?
+    @in_journey
+  end
+
   private
 
   def top_up_would_reach_limit?(amount)
