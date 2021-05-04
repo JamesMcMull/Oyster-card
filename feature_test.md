@@ -21,3 +21,7 @@ card.in_journey? # should return boolean
 card.touch_out # should return string "touched out"
 
 card.in_journey? # should return boolean
+
+card2 = Oystercard.new
+
+card.touch_in # should raise an exception

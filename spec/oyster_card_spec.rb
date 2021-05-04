@@ -35,8 +35,16 @@ describe Oystercard do
   describe '#touch_in' do
     it 'tells the user the card is touched in' do
       card = Oystercard.new
+      card.top_up(10)
       result = card.touch_in
       expect(result).to eq("touched in")
+    end
+
+    context 'when the user has less than the minimum allowed journey balance' do
+      it 'raise an error' do
+        card = Oystercard.new
+        expect { card.touch_in }.to raise_error('Balance is below minimum required for touch-in')
+      end
     end
   end
 
@@ -52,6 +60,7 @@ describe Oystercard do
     context 'when the user has touched in' do
       it "returns True" do
         card = Oystercard.new
+        card.top_up(10)
         card.touch_in
         expect(card).to be_in_journey
       end
@@ -59,6 +68,7 @@ describe Oystercard do
     context 'when the user has touched out' do
       it "returns False" do
         card = Oystercard.new
+        card.top_up(10)
         card.touch_in
         card.touch_out
         expect(card).not_to be_in_journey
