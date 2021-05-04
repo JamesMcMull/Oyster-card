@@ -21,4 +21,14 @@ describe Oystercard do
       end
     end    
   end
+
+  describe '#deduct' do
+    it 'subtracts a given amount from the balance' do
+      card = Oystercard.new
+      top_up_value = 20
+      deduct_value = 10
+      card.top_up(top_up_value)
+      expect { card.deduct(deduct_value) }.to change { card.balance }.from(top_up_value).to(top_up_value - deduct_value)
+    end
+  end
 end
