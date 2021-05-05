@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+  let (:station){ double :station }
   it " has a balance of 0" do
     #arrange
     card = Oystercard.new
@@ -26,18 +27,25 @@ describe Oystercard do
     it 'tells the user the card is touched in' do
       card = Oystercard.new
       card.top_up(10)
-      result = card.touch_in
+      result = card.touch_in(station)
       expect(result).to eq("touched in")
     end
     context 'when the user has less than the minimum allowed journey balance' do
       it 'raise an error' do
         card = Oystercard.new
-        expect { card.touch_in }.to raise_error('Balance is below minimum required for touch-in')
+        expect { card.touch_in(station) }.to raise_error('Balance is below minimum required for touch-in')
       end
+    end
+    it 'remembers entry station' do
+      subject.top_up(1)
+      subject.touch_in(station)
+      expect (subject.entry_station).to eq station
+      # expect (subject).to respond_to (@entry_station)
     end
   end
 
   describe '#touch_out' do
+    
     it 'tells the user their card has touched out' do
       card = Oystercard.new
       result = card.touch_out
@@ -45,8 +53,15 @@ describe Oystercard do
     end
     it 'deducts minimum amount from balance' do
       subject.top_up(1)
-      subject.touch_in
+      subject.touch_in(station)
       expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_TOUCH_IN_BALANCE)
+    end
+    it 'expects entry_station to return to nil' do
+      card = Oystercard.new
+      card.top_up(1)
+      card.touch_in(station)
+      card.touch_out
+      expect(card.entry_station).to eq(nil)
     end
   end
 
@@ -55,7 +70,7 @@ describe Oystercard do
       it "returns True" do
         card = Oystercard.new
         card.top_up(10)
-        card.touch_in
+        card.touch_in(station)
         expect(card).to be_in_journey
       end
     end
@@ -63,7 +78,7 @@ describe Oystercard do
       it "returns False" do
         card = Oystercard.new
         card.top_up(10)
-        card.touch_in
+        card.touch_in(station)
         card.touch_out
         expect(card).not_to be_in_journey
       end

@@ -14,7 +14,9 @@ card.balance # should return 40
 
 card.in_journey? # should return boolean
 
-card.touch_in # should return string "touched in"
+card.touch_in(station) # should return string "touched in" and return station
+
+card.entry_station # return string entry station
 
 card.in_journey? # should return boolean
 
