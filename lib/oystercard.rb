@@ -12,10 +12,6 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct(amount)
-    @balance -= amount
-  end
-
   def touch_in
     raise 'Balance is below minimum required for touch-in' if balance_below_minimum
     @in_journey = true
@@ -23,8 +19,9 @@ class Oystercard
   end
 
   def touch_out
+    deduct(MINIMUM_TOUCH_IN_BALANCE)
     @in_journey = false
-    "touched out"
+    'touched out'
   end
 
   def in_journey?
@@ -40,5 +37,8 @@ class Oystercard
   def balance_below_minimum
     @balance < MINIMUM_TOUCH_IN_BALANCE
   end
-end
 
+  def deduct(amount)
+    @balance -= amount
+  end
+end

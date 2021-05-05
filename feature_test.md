@@ -18,7 +18,7 @@ card.touch_in # should return string "touched in"
 
 card.in_journey? # should return boolean
 
-card.touch_out # should return string "touched out"
+card.touch_out # should return string "touched out" and ! Reduce by minimum fare !
 
 card.in_journey? # should return boolean
 

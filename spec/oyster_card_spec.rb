@@ -22,16 +22,6 @@ describe Oystercard do
     end    
   end
 
-  describe '#deduct' do
-    it 'subtracts a given amount from the balance' do
-      card = Oystercard.new
-      top_up_value = 20
-      deduct_value = 10
-      card.top_up(top_up_value)
-      expect { card.deduct(deduct_value) }.to change { card.balance }.from(top_up_value).to(top_up_value - deduct_value)
-    end
-  end
-
   describe '#touch_in' do
     it 'tells the user the card is touched in' do
       card = Oystercard.new
@@ -39,7 +29,6 @@ describe Oystercard do
       result = card.touch_in
       expect(result).to eq("touched in")
     end
-
     context 'when the user has less than the minimum allowed journey balance' do
       it 'raise an error' do
         card = Oystercard.new
@@ -53,6 +42,11 @@ describe Oystercard do
       card = Oystercard.new
       result = card.touch_out
       expect(result).to eq("touched out")
+    end
+    it 'deducts minimum amount from balance' do
+      subject.top_up(1)
+      subject.touch_in
+      expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_TOUCH_IN_BALANCE)
     end
   end
 
